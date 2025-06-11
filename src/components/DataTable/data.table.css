@@ -1,0 +1,30 @@
+.table-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table-objects {
+  border-collapse: collapse;
+}
+
+.table-objects th,
+.table-objects td {
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid #ddd;
+
+}
+
+.table-objects th {
+  background-color: #f4f4f4;
+}
+
+
+@media (max-width: 768px) {
+  .table-objects th,
+  .table-objects td {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+}

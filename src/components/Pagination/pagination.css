@@ -1,0 +1,38 @@
+.pagination {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.page-button {
+  padding: 1rem;
+  margin: 0 0.1rem;
+  background-color: #f0f0f0;
+  color: cornflowerblue;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.page-button.active {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+.page-button:hover {
+  background-color: rgb(127, 163, 230);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.1rem;
+  }
+
+  .page-button {
+    padding: 0.7rem 0.7rem;
+    font-size: 0.9rem;
+  }
+}
