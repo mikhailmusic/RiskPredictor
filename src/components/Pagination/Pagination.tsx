@@ -4,12 +4,19 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  maxPagesToShow?: number;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+  maxPagesToShow = 5,
+}) => {
+  if (totalPages <= 1) return null;  // Hide pagination if there's only one page
+
   const pageNumbers: number[] = [];
 
-  const maxPagesToShow = 5;
   let startPage = Math.max(currentPage - Math.floor(maxPagesToShow / 2), 1);
   let endPage = startPage + maxPagesToShow - 1;
 

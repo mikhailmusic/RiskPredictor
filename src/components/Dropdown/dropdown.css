@@ -14,7 +14,6 @@
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 1rem;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -23,7 +22,16 @@
   transition: border-color 0.2s;
 }
 
+.dropdown-display:focus {
+  border-color: cornflowerblue;
+    outline: none;
+}
+
 .dropdown-display.open {
+  border-color: cornflowerblue;
+}
+
+.dropdown-display:hover {
   border-color: cornflowerblue;
 }
 
@@ -62,16 +70,18 @@
 .dropdown-option {
   padding: 0.75rem;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 .dropdown-option:hover {
-  background-color: #f1f1f1;
+  background-color: rgba(100, 149, 237, 0.1);
 }
 
 .dropdown-option.selected {
-  background-color: cornflowerblue;
-  color: white;
+  background-color: rgba(100, 149, 237, 0.3);
+  
+}
+.dropdown-option.focused {
+  background-color: rgba(100, 149, 237, 0.1);
 }
 
 .dropdown-error {

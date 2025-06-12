@@ -12,12 +12,12 @@
 .table-objects td {
   padding: 1rem;
   text-align: left;
-  border: 1px solid #ddd;
+  border: 1px solid gray;
 
 }
 
 .table-objects th {
-  background-color: #f4f4f4;
+  background-color: #f0f0f0;
 }
 
 

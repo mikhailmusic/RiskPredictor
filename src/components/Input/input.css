@@ -1,7 +1,7 @@
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.3rem;
   width: 100%;
 }
 
@@ -20,6 +20,10 @@
 }
 
 .input-field:focus {
+  border-color: cornflowerblue;
+}
+
+.input-field:hover {
   border-color: cornflowerblue;
 }
 
