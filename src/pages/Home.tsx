@@ -4,8 +4,10 @@ import { IGeocodeResult } from "yandex-maps";
 import { v4 as uuidv4 } from "uuid";
 import Pagination from "../components/Pagination/Pagination";
 import { usePagination } from "../hooks/usePagination";
-import DataTable, {ColumnConfig} from "../components/DataTable/DataTable";
-
+import DataTable, { ColumnConfig } from "../components/DataTable/DataTable";
+import Button from "../components/Button/Button";
+import AccidentForm from "../widgets/Form/AccidentForm";
+import "./home.css";
 
 type CoordinatesType = Array<number>;
 
@@ -27,7 +29,7 @@ interface ISavedObject {
 const CENTER = [55.7522, 37.6156];
 const ZOOM = 12;
 
-const GeocodeMap = () => {
+const Main = () => {
   const [coordinates, setCoordinates] = useState<CoordinatesType | null>(null);
   const [address, setAddress] = useState<IAddress | null>(null);
   const [hasPanorama, setHasPanorama] = useState<boolean>(false);
@@ -86,19 +88,15 @@ const GeocodeMap = () => {
 
   const handleSaveObject = () => {
     const localStorageObjects = localStorage.getItem("objects");
-
     const objectArray = localStorageObjects ? JSON.parse(localStorageObjects) : [];
 
     const newObject = {
       id: uuidv4(),
       address,
-      coordinates
+      coordinates: coordinates?.map((coord) => +coord.toFixed(6))
     };
-
-    objectArray.push(newObject);
-
+    objectArray.unshift(newObject);
     localStorage.setItem("objects", JSON.stringify(objectArray));
-
     setObjectArray(objectArray);
   };
 
@@ -149,48 +147,51 @@ const GeocodeMap = () => {
   ];
 
   return (
-    <main>
+    <main className="home-main-section">
+      <section>
+        <h2>Форма ДТП</h2>
+        <AccidentForm />
+      </section>
 
-      <section className="map-container">
-        <article className="location-info">
-          {address ? (
-            <>
-              <p>{`Локация: ${address?.location}`}</p>
-              <p>{`Адрес: ${address?.route}`}</p>
-              <p>{`Координаты: ${formattedCoordinates}`}</p>
-
-              {hasPanorama && coordinates ? (
-                <Panorama key={coordinates?.join(",")} defaultPoint={coordinates ?? undefined} className="panorama" />
-              ) : (
-                <div className="no-panorama">
-                  <p>Панорама не найдена</p>
+      <section>
+        <h2>Карта</h2>
+        <div className="map-container">
+          <article className="location-info">
+            {address ? (
+              <>
+                <div>
+                  <p>{`Локация: ${address?.location}`}</p>
+                  <p>{`Адрес: ${address?.route}`}</p>
+                  <p>{`Координаты: ${formattedCoordinates}`}</p>
                 </div>
-              )}
-              <button className="primary-button" onClick={handleSaveObject}>
-                Сохранить
-              </button>
-            </>
-          ) : (
-            <p className="empty-message">Выберите точку на карте</p>
-          )}
-        </article>
 
-        <Map
-          defaultState={{ center: CENTER, zoom: ZOOM }}
-          onClick={(e: IMapClickEvent) => handleClickMap(e)}
-          className="map"
-        >
-          {coordinates && <Placemark geometry={coordinates} />}
-        </Map>
+                {hasPanorama && coordinates ? (
+                  <Panorama key={coordinates?.join(",")} defaultPoint={coordinates ?? undefined} className="panorama" />
+                ) : (
+                  <div className="no-panorama">
+                    <p>Панорама не найдена</p>
+                  </div>
+                )}
+                <Button onClick={handleSaveObject}>Сохранить</Button>
+              </>
+            ) : (
+              <p className="empty-message">Выберите точку на карте</p>
+            )}
+          </article>
+
+          <Map defaultState={{ center: CENTER, zoom: ZOOM }} onClick={(e: IMapClickEvent) => handleClickMap(e)} className="map">
+            {coordinates && <Placemark geometry={coordinates} />}
+          </Map>
+        </div>
       </section>
 
       {objectArray.length > 0 && (
-        <section className="locations-container">
+        <section>
           <div className="table-title">
             <h3>Сохраненные локации</h3>
-            <button className="clear-button" onClick={handleClearLocalStorage}>
+            <Button onClick={handleClearLocalStorage} variant="danger">
               Очистить
-            </button>
+            </Button>
           </div>
 
           <DataTable data={paginatedObjects} columns={columns} />
@@ -202,4 +203,4 @@ const GeocodeMap = () => {
   );
 };
 
-export default GeocodeMap;
+export default Main;
