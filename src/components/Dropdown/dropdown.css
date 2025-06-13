@@ -3,45 +3,29 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 0.3rem;
 }
 
 .dropdown-label {
   font-size: 0.9rem;
-  margin-bottom: 0.3rem;
 }
 
 .dropdown-display {
   padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: var(--border-base);
+  background: var(--white-color);
+  border-radius: var(--border-radius);
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
   transition: border-color 0.2s;
 }
 
-.dropdown-display:focus {
-  border-color: cornflowerblue;
-    outline: none;
-}
-
-.dropdown-display.open {
-  border-color: cornflowerblue;
-}
-
+.dropdown-display:focus,
+.dropdown-display.open,
 .dropdown-display:hover {
-  border-color: cornflowerblue;
-}
-
-.dropdown-display.has-error {
-  border-color: #dc3545;
-}
-
-.dropdown-display.disabled {
-  background-color: #f0f0f0;
-  cursor: not-allowed;
+  border-color: var(--primary-color);
 }
 
 .dropdown-arrow {
@@ -57,40 +41,31 @@
   left: 0;
   z-index: 10;
   width: 100%;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  background-color: var(--white-color);
+  border: var(--border-base);
+  border-radius: var(--border-radius);
   margin-top: 0.3rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.25rem 0;
+  box-shadow: var(--shadow-base);
   max-height: 200px;
   overflow-y: auto;
   list-style: none;
 }
 
 .dropdown-option {
-  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
   cursor: pointer;
-}
-
-.dropdown-option:hover {
-  background-color: rgba(100, 149, 237, 0.1);
+  transition: background-color 0.2s ease;
 }
 
 .dropdown-option.selected {
-  background-color: rgba(100, 149, 237, 0.3);
-  
+  background-color: var(--primary-color-lt);
 }
+
+.dropdown-option:hover,
 .dropdown-option.focused {
-  background-color: rgba(100, 149, 237, 0.1);
-}
-
-.dropdown-error {
-  margin-top: 0.25rem;
-  font-size: 0.8rem;
-  color: #dc3545;
-}
-
-.disabled .dropdown-display {
-  background-color: #eee;
-  pointer-events: none;
+  background-color: var(--primary-color-lt-hover);
 }

@@ -81,16 +81,20 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   return (
-    <div className={`dropdown-group ${disabled ? "disabled" : ""}`} ref={ref}>
+    <div className="dropdown-group" ref={ref}>
       {label && (
-        <label htmlFor={id} className="dropdown-label">
+        <span id={`${id}-label`} className="dropdown-label">
           {label}
-        </label>
+        </span>
       )}
       <div
         id={id}
-        className={`dropdown-display ${open ? "open" : ""} ${error ? "has-error" : ""}`}
+        className={`dropdown-display ${open ? "open" : ""} ${error ? "input-error" : ""} ${disabled ? "is-disabled" : ""}`}
         tabIndex={0}
+        role="combobox"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-labelledby={`${id}-label`}
         onClick={() => !disabled && setOpen((prev) => !prev)}
         onKeyDown={handleKeyDown}
       >
@@ -117,7 +121,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           ))}
         </ul>
       )}
-      {error && <div className="dropdown-error">{error}</div>}
+      {error && <div className="text-error">{error}</div>}
     </div>
   );
 };

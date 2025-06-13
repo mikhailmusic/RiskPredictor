@@ -7,23 +7,22 @@
 .page-button {
   padding: 1rem;
   margin: 0 0.1rem;
-  background-color: #f0f0f0;
-  color: cornflowerblue;
+  background-color: var(--background-color-hover);
+  color: var(--primary-color);
   border: none;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   cursor: pointer;
 }
 
 .page-button.active {
-  background-color: cornflowerblue;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--white-color);
 }
 
 .page-button:hover {
-  background-color: rgb(127, 163, 230);
-  color: white;
+  background-color: var(--primary-color-hover);
+  color: var(--white-color);
 }
-
 @media (max-width: 768px) {
   .pagination {
     justify-content: center;

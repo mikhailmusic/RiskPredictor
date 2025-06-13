@@ -1,0 +1,68 @@
+:root {
+  --primary-color: #6495ed;
+  --primary-color-hover: #7fa3e6;
+  --primary-color-lt: rgba(100, 149, 237, 0.3);
+  --primary-color-lt-hover: rgba(100, 149, 237, 0.1);
+
+  --secondary-color: #7B68EE;
+
+  --background-color: #fbfcfe;
+  --background-color-hover: #f4f4f4;
+  --background-color-focus: #dce0eb;
+  --background-color-disabled: #eeeeee;
+
+
+  --text-color: #25292e;
+  --text-color-light: #fbfcfe;
+  --text-color-muted: #7a7f8c;
+
+  --success-color: #28a745;
+  --success-color-hover: #2ecc71;
+  --danger-color: #dc3545;
+  --danger-color-hover: #e14d5c;
+  --warning-color: #ffc107;
+  --warning-color-hover: #e0a800;
+  --neutral-color: #ced4da;
+  --neutral-color-hover: #dee2e6;
+
+  --border-color: #ccc;
+
+  --white-color: #fbfcfe;
+}
+
+:root {
+  --shadow-small: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-large: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+:root {
+  --font-family-base: Arial, "Roboto", "Segoe UI", "Ubuntu", "Helvetica", sans-serif;
+  --font-size-sm: 0.75rem;      /* 12px */
+  --font-size-md: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-xxl: 1.5rem;      /* 24px */
+  --line-height-base: 1.5;
+  --font-weight-base: 400;
+}
+
+@media (max-width: 576px) {
+  :root {
+    --font-size-sm: 0.625rem;   /* 10px */
+    --font-size-md: 0.75rem;    /* 12px */
+    --font-size-base: 0.875rem; /* 14px */
+    --font-size-lg: 1rem;       /* 16px */
+    --font-size-xl: 1.125rem;   /* 18px */
+    --font-size-xxl: 1.25rem;   /* 20px */
+  }
+}
+
+:root {
+  --border-radius-sm: 4px;
+  --border-radius: 8px;
+  --border-radius-lg: 10px;
+
+  --border-base: 1px solid var(--border-color);
+}

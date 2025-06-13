@@ -15,8 +15,8 @@ const Input: React.FC<InputProps> = ({ id, label, error, ...rest }) => {
           {label}
         </label>
       )}
-      <input id={id} className={`input-field ${error ? "has-error" : ""}`} {...rest} />
-      {error && <span className="input-error">{error}</span>}
+      <input id={id} className={`input-field ${error ? "input-error" : ""} ${rest.disabled ? "is-disabled" : ""}`} {...rest}/>
+      {error && <span className="text-error">{error}</span>}
     </div>
   );
 };

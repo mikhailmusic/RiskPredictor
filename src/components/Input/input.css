@@ -11,27 +11,16 @@
 
 .input-field {
   padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
+  border: var(--border-base);
+  background-color: var(--white-color);
+  border-radius: var(--border-radius);
   font-family: inherit;
   outline: none;
   transition: border-color 0.2s ease-in-out;
 }
 
-.input-field:focus {
-  border-color: cornflowerblue;
-}
-
+.input-field:focus,
 .input-field:hover {
-  border-color: cornflowerblue;
+  border-color: var(--primary-color);
 }
 
-.has-error {
-  border-color: #dc3545;
-}
-
-.input-error {
-  font-size: 0.8rem;
-  color: #dc3545;
-}

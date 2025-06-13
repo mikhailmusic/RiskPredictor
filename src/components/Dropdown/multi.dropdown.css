@@ -5,35 +5,30 @@
   width: 100%;
   min-width: 0;
   user-select: none;
+    gap: 0.3rem;
 }
 
 .multi-dropdown-label {
-  margin-bottom: 0.3rem;
   font-size: 0.9rem;
 }
 
 .multi-dropdown-display {
-  padding: 0.75rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: white;
+  padding: 0.75rem;
+  border: var(--border-base);
+  background: var(--white-color);
+  border-radius: var(--border-radius);
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  transition: border-color 0.2s ease; 
+  transition: border-color 0.2s ease;
 }
 
-.multi-dropdown-display:hover {
-  border-color: cornflowerblue;
-}
-
-.multi-dropdown-display.open {
-  border-color: cornflowerblue;
-}
-
-.multi-dropdown-display.has-error {
-  border-color: #dc3545;
+.multi-dropdown-display:hover,
+.multi-dropdown-display.open,
+.multi-dropdown-display:focus {
+  border-color: var(--primary-color);
+  outline: none;
 }
 
 .multi-dropdown-selected {
@@ -54,18 +49,18 @@
 
 .multi-dropdown-options {
   position: absolute;
-  top: calc(100% + 4px);
+  top: 100%;
   left: 0;
-  z-index: 20;
+  z-index: 10;
   width: 100%;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  max-height: 240px;
-  overflow-y: auto;
+  background-color: var(--white-color);
+  border: var(--border-base);
+  border-radius: var(--border-radius);
+  margin-top: 0.3rem;
   padding: 0.25rem 0;
-  margin: 0;
+  box-shadow: var(--shadow-base);
+  max-height: 200px;
+  overflow-y: auto;
   list-style: none;
 }
 
@@ -80,35 +75,15 @@
 
 .multi-dropdown-option input[type="checkbox"] {
   pointer-events: none;
-  accent-color: cornflowerblue;
-}
-
-.multi-dropdown-option:hover {
-  background-color: rgba(100, 149, 237, 0.1);
+  accent-color: var(--primary-color);
 }
 
 .multi-dropdown-option.selected {
-  background-color: rgba(100, 149, 237, 0.3);
+  background-color: var(--primary-color-lt);
 }
 
-.multi-dropdown-display:focus {
-  outline: none;
-  border-color: cornflowerblue;
-}
-
+.multi-dropdown-option:hover,
 .multi-dropdown-option.focused {
-  background-color: rgba(100, 149, 237, 0.1);
-
+  background-color: var(--primary-color-lt-hover);
 }
 
-.dropdown-error {
-  color: #dc3545;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
-}
-
-.multi-disabled .multi-dropdown-display {
-  background-color: #f2f2f2;
-  cursor: not-allowed;
-  color: #999;
-}

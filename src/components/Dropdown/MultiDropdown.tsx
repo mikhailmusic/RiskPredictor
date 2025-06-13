@@ -90,37 +90,49 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
   };
 
   return (
-    <div className={`multi-dropdown-group ${disabled ? "multi-disabled" : ""}`} ref={ref}>
+    <div className="multi-dropdown-group" ref={ref}>
       {label && (
-        <label htmlFor={id} className="multi-dropdown-label">
+        <span id={`${id}-label`} className="multi-dropdown-label">
           {label}
-        </label>
+        </span>
       )}
       <div
         id={id}
-        className={`multi-dropdown-display ${open ? "open" : ""} ${error ? "has-error" : ""}`}
+        className={`multi-dropdown-display ${open ? "open" : ""} ${error ? "input-error" : ""} ${disabled ? "is-disabled" : ""}`}
         tabIndex={0}
+        role="combobox"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-multiselectable="true"
+        aria-labelledby={`${id}-label`}
         onClick={() => !disabled && setOpen((prev) => !prev)}
         onKeyDown={handleKeyDown}
       >
-        <span className="multi-dropdown-selected" title={selectedLabels}>{selectedLabels || placeholder}</span>
+        <span className="multi-dropdown-selected" title={selectedLabels}>
+          {selectedLabels || placeholder}
+        </span>
         <ChevronDown className="multi-dropdown-arrow" />
       </div>
       {open && (
         <ul className="multi-dropdown-options">
-          {options.map((option, idx) => (
-            <li
-              key={option.value}
-              className={`multi-dropdown-option ${values.includes(option.value) ? "selected" : ""} ${focusedIndex === idx ? "focused" : ""}`}
-              onClick={() => toggleOption(option.value)}
-            >
-              <input type="checkbox" readOnly checked={values.includes(option.value)} />
-              {option.label}
-            </li>
-          ))}
+          {options.map((option, idx) => {
+            const checkboxId = `${id}-checkbox-${option.value}`;
+            return (
+              <li
+                key={option.value}
+                role="option"
+                aria-selected={values.includes(option.value)}
+                className={`multi-dropdown-option ${values.includes(option.value) ? "selected" : ""} ${focusedIndex === idx ? "focused" : ""}`}
+                onClick={() => toggleOption(option.value)}
+              >
+                <input type="checkbox" id={checkboxId} name={id} readOnly checked={values.includes(option.value)} />
+                <span>{option.label}</span>
+              </li>
+            );
+          })}
         </ul>
       )}
-      {error && <div className="multi-dropdown-error">{error}</div>}
+      {error && <div className="text-error">{error}</div>}
     </div>
   );
 };

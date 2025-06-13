@@ -1,6 +1,6 @@
 import "./button.css";
 
-type ButtonVariant = "primary" | "secondary" | "danger" | "outline";
+type ButtonVariant = "primary" | "secondary" | "danger";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
