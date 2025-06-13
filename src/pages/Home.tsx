@@ -1,12 +1,12 @@
 import { Map, Panorama, Placemark, useYMaps } from "@pbe/react-yandex-maps";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { IGeocodeResult } from "yandex-maps";
-import { v4 as uuidv4 } from "uuid";
 import Pagination from "../components/Pagination/Pagination";
 import { usePagination } from "../hooks/usePagination";
 import DataTable, { ColumnConfig } from "../components/DataTable/DataTable";
 import Button from "../components/Button/Button";
 import AccidentForm from "../widgets/Form/AccidentForm";
+import { AccidentData, useAccidentStore } from "../store/accidentStore";
 import "./home.css";
 
 type CoordinatesType = Array<number>;
@@ -20,12 +20,6 @@ interface IAddress {
   route: string;
 }
 
-interface ISavedObject {
-  id: string;
-  address: IAddress | null;
-  coordinates: CoordinatesType | null;
-}
-
 const CENTER = [55.7522, 37.6156];
 const ZOOM = 12;
 
@@ -33,39 +27,54 @@ const Main = () => {
   const [coordinates, setCoordinates] = useState<CoordinatesType | null>(null);
   const [address, setAddress] = useState<IAddress | null>(null);
   const [hasPanorama, setHasPanorama] = useState<boolean>(false);
-  const [objectArray, setObjectArray] = useState<ISavedObject[]>([]);
+  const { history, loadFromHistory, clearHistory, currentForm, updatePartialForm } = useAccidentStore();
 
   const ymaps = useYMaps(["geocode"]);
   const formattedCoordinates = coordinates ? `${coordinates[0]?.toFixed(6)}, ${coordinates[1]?.toFixed(6)}` : null;
 
-  const handleClickMap = (e: IMapClickEvent) => {
-    const coords = e.get("coords");
+  const loadMapInfo = useCallback(
+    async (coords: CoordinatesType) => {
+      if (!ymaps) return;
 
-    if (coords) {
       setCoordinates(coords);
-    }
 
-    ymaps?.panorama
-      .locate(coords)
-      .then((panorama) => {
+      try {
+        const panorama = await ymaps.panorama.locate(coords);
         setHasPanorama(!!panorama.length);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.log("Ошибка при поиске панорамы", error);
         setHasPanorama(false);
-      });
+      }
 
-    ymaps
-      ?.geocode(coords)
-      .then((result) => {
+      try {
+        const result = await ymaps.geocode(coords);
         const foundAddress = handleGeoResult(result);
-
         if (foundAddress) setAddress(foundAddress);
-      })
-      .catch((error: unknown) => {
+      } catch (error) {
         console.log("Ошибка геокодирования", error);
         setAddress(null);
-      });
+      }
+    },
+    [ymaps]
+  );
+
+  useEffect(() => {
+    if (currentForm.point_lat && currentForm.point_long) {
+      const coords: CoordinatesType = [+currentForm.point_lat, +currentForm.point_long];
+      loadMapInfo(coords);
+    }
+  }, [currentForm.point_lat, currentForm.point_long, loadMapInfo]);
+
+  const handleClickMap = (e: IMapClickEvent) => {
+    const coords = e.get("coords");
+    if (!coords) return;
+
+    updatePartialForm({
+      point_lat: +coords[0].toFixed(6),
+      point_long: +coords[1].toFixed(6)
+    });
+
+    loadMapInfo(coords);
   };
 
   function handleGeoResult(result: IGeocodeResult) {
@@ -77,72 +86,23 @@ const Main = () => {
       const location = String(properties.get("description", {}));
       const route = String(properties.get("name", {}));
 
-      const foundAddress = {
-        location,
-        route
-      };
+      const foundAddress = { location, route};
 
       return foundAddress;
     }
   }
 
-  const handleSaveObject = () => {
-    const localStorageObjects = localStorage.getItem("objects");
-    const objectArray = localStorageObjects ? JSON.parse(localStorageObjects) : [];
-
-    const newObject = {
-      id: uuidv4(),
-      address,
-      coordinates: coordinates?.map((coord) => +coord.toFixed(6))
-    };
-    objectArray.unshift(newObject);
-    localStorage.setItem("objects", JSON.stringify(objectArray));
-    setObjectArray(objectArray);
-  };
-
-  const loadSavedObjects = () => {
-    const localStorageObjects = localStorage.getItem("objects");
-
-    if (localStorageObjects) {
-      const parsedObjects = JSON.parse(localStorageObjects).map((item: ISavedObject) => ({
-        ...item,
-        key: item.id
-      }));
-
-      setObjectArray(parsedObjects);
-    } else {
-      setObjectArray([]);
-    }
-  };
-
-  const handleClearLocalStorage = () => {
-    localStorage.clear();
-    setObjectArray([]);
-  };
-
-  useEffect(() => {
-    loadSavedObjects();
-  }, []);
-
-  const { currentPage, totalPages, paginatedData, handlePageChange } = usePagination<ISavedObject>({
+  const { currentPage, totalPages, paginatedData, handlePageChange } = usePagination<AccidentData>({
     initialPage: 1,
     pageSize: 10,
-    totalItems: objectArray.length
+    totalItems: history.length
   });
-  const paginatedObjects = paginatedData(objectArray);
+  const paginatedObjects = paginatedData(history);
 
-  const columns: ColumnConfig<ISavedObject>[] = [
-    {
-      header: "Локация",
-      render: (item) => item.address?.location || "-"
-    },
-    {
-      header: "Адрес",
-      render: (item) => item.address?.route || "-"
-    },
+  const columns: ColumnConfig<AccidentData>[] = [
     {
       header: "Координаты",
-      render: (item) => (item.coordinates ? `${item.coordinates[0]}, ${item.coordinates[1]}` : "-")
+      render: (item) => (item.form.point_lat && item.form.point_long ? `${item.form.point_lat}, ${item.form.point_long}` : "-")
     }
   ];
 
@@ -172,7 +132,6 @@ const Main = () => {
                     <p>Панорама не найдена</p>
                   </div>
                 )}
-                <Button onClick={handleSaveObject}>Сохранить</Button>
               </>
             ) : (
               <p className="empty-message">Выберите точку на карте</p>
@@ -185,16 +144,21 @@ const Main = () => {
         </div>
       </section>
 
-      {objectArray.length > 0 && (
+      {history.length > 0 && (
         <section>
           <div className="table-title">
             <h3>Сохраненные локации</h3>
-            <Button onClick={handleClearLocalStorage} variant="danger">
+            <Button onClick={clearHistory} variant="danger">
               Очистить
             </Button>
           </div>
 
-          <DataTable data={paginatedObjects} columns={columns} />
+          <DataTable
+            getRowKey={(item) => item.id}
+            onRowClick={(item) => loadFromHistory(item.id)}
+            data={paginatedObjects}
+            columns={columns}
+          />
 
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </section>

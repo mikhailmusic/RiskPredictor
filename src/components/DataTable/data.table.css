@@ -12,12 +12,21 @@
 .table-objects td {
   padding: 1rem;
   text-align: left;
-  border: 1px solid gray;
+  border: 1px solid #ccc;
 
 }
 
 .table-objects th {
-  background-color: #f0f0f0;
+  background-color: cornflowerblue;
+  color: white;
+}
+
+.table-objects tr.clickable-row {
+  cursor: pointer;
+}
+
+.table-objects tr.clickable-row:hover {
+  background-color: rgba(100, 149, 237, 0.1);
 }
 
 

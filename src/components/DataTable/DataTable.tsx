@@ -1,4 +1,4 @@
-import './data.table.css'
+import "./data.table.css";
 
 export interface ColumnConfig<T> {
   header: string;
@@ -8,9 +8,12 @@ export interface ColumnConfig<T> {
 interface DataTableProps<T> {
   data: T[];
   columns: ColumnConfig<T>[];
+  onRowClick?: (item: T) => void;
+    getRowKey?: (item: T, index: number) => React.Key;
+
 }
 
-const DataTable = <T,>({ data, columns }: DataTableProps<T>) => {
+const DataTable = <T,>({ data, columns, onRowClick, getRowKey }: DataTableProps<T>) => {
   return (
     <table className="table-objects">
       <thead>
@@ -22,7 +25,7 @@ const DataTable = <T,>({ data, columns }: DataTableProps<T>) => {
       </thead>
       <tbody>
         {data.map((item, rowIdx) => (
-          <tr key={rowIdx}>
+          <tr key={getRowKey ? getRowKey(item, rowIdx) : rowIdx} onClick={() => onRowClick?.(item)} className={onRowClick ? "clickable-row" : ""}>
             {columns.map((col, colIdx) => (
               <td key={colIdx}>{col.render(item)}</td>
             ))}
