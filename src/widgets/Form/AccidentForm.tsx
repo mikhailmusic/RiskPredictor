@@ -69,10 +69,15 @@ const AccidentForm: React.FC = () => {
     if (!contract.day_of_week.includes(f.day_of_week)) {
       newErrors.day_of_week = "Недопустимый день недели";
     }
-    if (!f.weather.every((w) => contract.weather.includes(w))) {
+    if (!Array.isArray(f.weather) || f.weather.length === 0) {
+      newErrors.weather = "Укажите погоду";
+    } else if (!f.weather.every((w) => contract.weather.includes(w))) {
       newErrors.weather = "Недопустимая погода";
     }
-    if (!f.road_conditions.every((r) => contract.road_conditions.includes(r))) {
+
+    if (!Array.isArray(f.road_conditions) || f.road_conditions.length === 0) {
+      newErrors.road_conditions = "Укажите состояние дороги";
+    } else if (!f.road_conditions.every((r) => contract.road_conditions.includes(r))) {
       newErrors.road_conditions = "Недопустимое состояние дороги";
     }
 
