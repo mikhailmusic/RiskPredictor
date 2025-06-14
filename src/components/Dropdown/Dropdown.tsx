@@ -110,7 +110,8 @@ const Dropdown: React.FC<DropdownProps> = ({
             ${option.value === value ? "selected" : ""} 
             ${focusedIndex === idx ? "focused" : ""}
           `}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   onChange(option.value);
                   setOpen(false);
                   setFocusedIndex(-1);

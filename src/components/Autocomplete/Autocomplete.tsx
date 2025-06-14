@@ -91,10 +91,8 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ id, label, options, value, 
           }}
           onFocus={() => setShowOptions(true)}
           onBlur={() => {
-            setTimeout(() => {
-              setShowOptions(false);
-              setActiveIndex(-1);
-            }, 100);
+            setShowOptions(false);
+            setActiveIndex(-1);
           }}
           onKeyDown={handleKeyDown}
         />
@@ -105,7 +103,10 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ id, label, options, value, 
               <li
                 key={opt}
                 ref={(el) => (optionRefs.current[index] = el)}
-                onMouseDown={() => handleSelect(opt)}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  handleSelect(opt);
+                }}
                 className={`autocomplete-item ${index === activeIndex ? "focused" : ""}`}
               >
                 {opt}

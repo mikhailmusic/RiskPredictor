@@ -123,7 +123,10 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
                   role="option"
                   aria-selected={values.includes(option.value)}
                   className={`multi-dropdown-option ${values.includes(option.value) ? "selected" : ""} ${focusedIndex === idx ? "focused" : ""}`}
-                  onClick={() => toggleOption(option.value)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleOption(option.value);
+                  }}
                 >
                   <input type="checkbox" id={checkboxId} name={id} readOnly checked={values.includes(option.value)} />
                   <span>{option.label}</span>
