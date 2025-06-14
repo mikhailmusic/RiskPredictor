@@ -1,3 +1,36 @@
+export type AllowedValuesContract = {
+  weather: string[];
+  road_conditions: string[];
+  time_of_day: string[];
+  driver_gender: string[];
+  vehicle_color: string[];
+  vehicle_category_grouped: string[];
+  day_of_week: number[];
+  vehicle_year: {
+    min: number;
+    max: number;
+  };
+  vehicle_participants_count: {
+    min: number;
+    max: number;
+  };
+  driver_years_of_driving_experience: {
+    min: number;
+    max: number;
+  };
+  point_lat: {
+    min: number;
+    max: number;
+  };
+  point_long: {
+    min: number;
+    max: number;
+  };
+  vehicle_brand: string[];
+  vehicle_model: string[];
+};
+
+
 export type AccidentFormData = {
   point_lat: number; 
   point_long: number;
@@ -14,19 +47,3 @@ export type AccidentFormData = {
   day_of_week: number;
   time_of_day: string;
 }
-
-export const genderOptions = [
-  { label: "Мужской", value: "Мужской" },
-  { label: "Женский", value: "Женский" }
-];
-
-export const timeOfDayOptions = [
-  { label: "Утро", value: "Утро" },
-  { label: "День", value: "День" },
-  { label: "Вечер", value: "Вечер" },
-  { label: "Ночь", value: "Ночь" }
-];
-
-export const weatherOptions = ["Солнечно", "Дождь", "Снег", "Пасмурно"];
-export const roadConditionsOptions = ["Сухое", "Мокрое", "Заснеженное", "Гололёд"];
-

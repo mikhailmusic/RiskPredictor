@@ -23,6 +23,12 @@
   width: 100%;
 }
 
+.risk-result{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 
 @media (max-width: 576px) {
   .coordinates-group {
