@@ -112,26 +112,28 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
           {selectedLabels || placeholder}
         </span>
         <ChevronDown className="multi-dropdown-arrow" />
+
+        {open && (
+          <ul className="multi-dropdown-options custom-scroll">
+            {options.map((option, idx) => {
+              const checkboxId = `${id}-checkbox-${option.value}`;
+              return (
+                <li
+                  key={option.value}
+                  role="option"
+                  aria-selected={values.includes(option.value)}
+                  className={`multi-dropdown-option ${values.includes(option.value) ? "selected" : ""} ${focusedIndex === idx ? "focused" : ""}`}
+                  onClick={() => toggleOption(option.value)}
+                >
+                  <input type="checkbox" id={checkboxId} name={id} readOnly checked={values.includes(option.value)} />
+                  <span>{option.label}</span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
-      {open && (
-        <ul className="multi-dropdown-options">
-          {options.map((option, idx) => {
-            const checkboxId = `${id}-checkbox-${option.value}`;
-            return (
-              <li
-                key={option.value}
-                role="option"
-                aria-selected={values.includes(option.value)}
-                className={`multi-dropdown-option ${values.includes(option.value) ? "selected" : ""} ${focusedIndex === idx ? "focused" : ""}`}
-                onClick={() => toggleOption(option.value)}
-              >
-                <input type="checkbox" id={checkboxId} name={id} readOnly checked={values.includes(option.value)} />
-                <span>{option.label}</span>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+
       {error && <div className="text-error">{error}</div>}
     </div>
   );

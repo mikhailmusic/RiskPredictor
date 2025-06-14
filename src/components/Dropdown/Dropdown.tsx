@@ -100,27 +100,29 @@ const Dropdown: React.FC<DropdownProps> = ({
       >
         <span className="dropdown-selected">{selectedOption ? selectedOption.label : placeholder}</span>
         <ChevronDown className="dropdown-arrow" />
+
+        {open && (
+          <ul className="dropdown-options custom-scroll">
+            {options.map((option, idx) => (
+              <li
+                key={option.value}
+                className={`dropdown-option 
+            ${option.value === value ? "selected" : ""} 
+            ${focusedIndex === idx ? "focused" : ""}
+          `}
+                onClick={() => {
+                  onChange(option.value);
+                  setOpen(false);
+                  setFocusedIndex(-1);
+                }}
+              >
+                {option.label}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-      {open && (
-        <ul className="dropdown-options">
-          {options.map((option, idx) => (
-            <li
-              key={option.value}
-              className={`dropdown-option 
-                ${option.value === value ? "selected" : ""} 
-                ${focusedIndex === idx ? "focused" : ""}
-              `}
-              onClick={() => {
-                onChange(option.value);
-                setOpen(false);
-                setFocusedIndex(-1);
-              }}
-            >
-              {option.label}
-            </li>
-          ))}
-        </ul>
-      )}
+
       {error && <div className="text-error">{error}</div>}
     </div>
   );

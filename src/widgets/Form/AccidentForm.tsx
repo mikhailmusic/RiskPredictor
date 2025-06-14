@@ -5,6 +5,7 @@ import { AllowedValuesContract } from "../../api/types";
 import Input from "../../components/Input/Input";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import MultiDropdown from "../../components/Dropdown/MultiDropdown";
+import Autocomplete from "../../components/Autocomplete/Autocomplete";
 import Button from "../../components/Button/Button";
 import "./accident.form.css";
 
@@ -100,7 +101,7 @@ const AccidentForm: React.FC = () => {
       newErrors.vehicle_category = "Недопустимая категория";
     }
     if (f.vehicle_year < contract.vehicle_year.min || f.vehicle_year > contract.vehicle_year.max) {
-      newErrors.vehicle_year = `Год выпуска вне диапазона (${contract.vehicle_year.min}–${contract.vehicle_year.max})`;
+      newErrors.vehicle_year = `Год выпуска (${contract.vehicle_year.min}–${contract.vehicle_year.max})`;
     }
     if (f.participants_count < contract.vehicle_participants_count.min || f.participants_count > contract.vehicle_participants_count.max) {
       newErrors.participants_count = "Кол-во участников вне допустимого диапазона";
@@ -114,7 +115,6 @@ const AccidentForm: React.FC = () => {
     const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
     return days[day - 1] ?? `День ${day}`;
   }
-
 
   if (errors._contract) {
     return <p>{errors._contract}</p>;
@@ -180,19 +180,19 @@ const AccidentForm: React.FC = () => {
           error={errors.road_conditions}
         />
 
-        <Dropdown
+        <Autocomplete
           id="vehicleBrand"
           label="Марка автомобиля"
-          options={contract.vehicle_brand.map((b) => ({ label: b, value: b }))}
+          options={contract.vehicle_brand}
           value={currentForm.vehicle_brand}
           onChange={(val) => updatePartialForm({ vehicle_brand: val })}
           error={errors.vehicle_brand}
         />
 
-        <Dropdown
+        <Autocomplete
           id="vehicleModel"
           label="Модель"
-          options={contract.vehicle_model.map((m) => ({ label: m, value: m }))}
+          options={contract.vehicle_model}
           value={currentForm.vehicle_model}
           onChange={(val) => updatePartialForm({ vehicle_model: val })}
           error={errors.vehicle_model}

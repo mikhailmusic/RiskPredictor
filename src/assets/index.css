@@ -87,3 +87,23 @@ textarea {
     background-color: var(--neutral-color);
   }
 }
+
+
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) transparent;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: var(--border-radius-sm);
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid transparent;
+}

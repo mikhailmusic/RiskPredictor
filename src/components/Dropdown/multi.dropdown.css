@@ -5,7 +5,7 @@
   width: 100%;
   min-width: 0;
   user-select: none;
-    gap: 0.3rem;
+  gap: 0.3rem;
 }
 
 .multi-dropdown-label {
@@ -13,6 +13,7 @@
 }
 
 .multi-dropdown-display {
+  position: relative;
   padding: 0.75rem;
   border: var(--border-base);
   background: var(--white-color);
@@ -56,7 +57,7 @@
   background-color: var(--white-color);
   border: var(--border-base);
   border-radius: var(--border-radius);
-  margin-top: 0.3rem;
+  margin-top: 0.5rem;
   padding: 0.25rem 0;
   box-shadow: var(--shadow-base);
   max-height: 200px;
@@ -86,4 +87,3 @@
 .multi-dropdown-option.focused {
   background-color: var(--primary-color-lt-hover);
 }
-
