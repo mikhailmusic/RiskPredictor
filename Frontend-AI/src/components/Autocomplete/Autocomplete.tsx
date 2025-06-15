@@ -89,7 +89,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ id, label, options, value, 
           className={`input-field ${error ? "input-error" : ""} ${disabled ? "is-disabled" : ""}`}
           value={inputValue}
           placeholder={placeholder}
-          disabled={disabled}
+          disabled={disabled} autoComplete="off"
           onChange={(e) => {
             setInputValue(e.target.value);
             setShowOptions(true);
