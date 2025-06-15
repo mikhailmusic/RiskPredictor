@@ -70,6 +70,10 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ id, label, options, value, 
     }
   }, [activeIndex]);
 
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+
   return (
     <div className="autocomplete-group">
       {label && (
@@ -95,7 +99,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ id, label, options, value, 
           onBlur={() => {
             setShowOptions(false);
             setActiveIndex(-1);
-            onChange(inputValue); 
+            onChange(inputValue);
           }}
           onKeyDown={(e) => !disabled && handleKeyDown(e)}
         />
