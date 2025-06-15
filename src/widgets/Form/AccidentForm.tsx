@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAccidentStore } from "../../store/accidentStore";
 import { predictAccidentRisk, fetchAccidentContract } from "../../api/accidentApi";
 import { AllowedValuesContract } from "../../api/types";
+import { getDayName } from "../../utils/dateUtils";
 import Input from "../../components/Input/Input";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import MultiDropdown from "../../components/Dropdown/MultiDropdown";
@@ -115,11 +116,6 @@ const AccidentForm: React.FC = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  function getDayName(day: number): string {
-    const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
-    return days[day - 1] ?? `День ${day}`;
-  }
 
   if (errors._contract) {
     return <p>{errors._contract}</p>;

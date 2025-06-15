@@ -3,6 +3,8 @@ import { useEffect, useState, useCallback } from "react";
 import { IGeocodeResult } from "yandex-maps";
 import Pagination from "../components/Pagination/Pagination";
 import { usePagination } from "../hooks/usePagination";
+import { useIsMobile } from "../hooks/useIsMobile";
+import { getDayName } from "../utils/dateUtils";
 import DataTable, { ColumnConfig } from "../components/DataTable/DataTable";
 import Button from "../components/Button/Button";
 import AccidentForm from "../widgets/Form/AccidentForm";
@@ -28,6 +30,7 @@ const Main = () => {
   const [address, setAddress] = useState<IAddress | null>(null);
   const [hasPanorama, setHasPanorama] = useState<boolean>(false);
   const { history, loadFromHistory, clearHistory, currentForm, updatePartialForm } = useAccidentStore();
+  const isMobile = useIsMobile();
 
   const ymaps = useYMaps(["geocode"]);
   const formattedCoordinates = coordinates ? `${coordinates[0]?.toFixed(6)}, ${coordinates[1]?.toFixed(6)}` : null;
@@ -86,7 +89,7 @@ const Main = () => {
       const location = String(properties.get("description", {}));
       const route = String(properties.get("name", {}));
 
-      const foundAddress = { location, route};
+      const foundAddress = { location, route };
 
       return foundAddress;
     }
@@ -99,12 +102,31 @@ const Main = () => {
   });
   const paginatedObjects = paginatedData(history);
 
-  const columns: ColumnConfig<AccidentData>[] = [
-    {
+  const columnMap: Record<string, ColumnConfig<AccidentData>> = {
+    coordinates: {
       header: "Координаты",
       render: (item) => (item.form.point_lat && item.form.point_long ? `${item.form.point_lat}, ${item.form.point_long}` : "-")
+    },
+    brand: {
+      header: "Марка автомобиля",
+      render: (item) => item.form.vehicle_brand || "-"
+    },
+    model: {
+      header: "Модель",
+      render: (item) => item.form.vehicle_model || "-"
+    },
+    day: {
+      header: "День недели",
+      render: (item) => (item.form.day_of_week != null ? getDayName(item.form.day_of_week) : "-")
+    },
+    time: {
+      header: "Время суток",
+      render: (item) => item.form.time_of_day || "-"
     }
-  ];
+  };
+  const visibleColumns: string[] = isMobile ? ["coordinates", "brand", "model"] : ["coordinates", "brand", "model", "day", "time"];
+
+  const columns: ColumnConfig<AccidentData>[] = visibleColumns.map((key) => columnMap[key]);
 
   return (
     <main className="home-main-section">
@@ -147,7 +169,7 @@ const Main = () => {
       {history.length > 0 && (
         <section>
           <div className="table-title">
-            <h3>Сохраненные локации</h3>
+            <h3>История</h3>
             <Button onClick={clearHistory} variant="danger">
               Очистить
             </Button>
