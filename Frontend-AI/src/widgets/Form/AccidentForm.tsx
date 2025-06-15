@@ -26,10 +26,11 @@ const AccidentForm: React.FC = () => {
         setErrors({ _contract: "Не удалось загрузить схему" });
       }
     };
-
     setErrors({});
     loadContract();
   }, []);
+  const availableBrands = Object.keys(contract?.vehicle_info ?? {});
+  const availableModels = contract?.vehicle_info[currentForm.vehicle_brand] ?? [];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,11 +95,16 @@ const AccidentForm: React.FC = () => {
     }
 
     // Транспорт
-    if (!contract.vehicle_brand.includes(f.vehicle_brand)) {
+    if (!f.vehicle_brand) {
+      newErrors.vehicle_brand = "Укажите марку автомобиля";
+    } else if (!contract.vehicle_info[f.vehicle_brand]) {
       newErrors.vehicle_brand = "Недопустимая марка";
     }
-    if (!contract.vehicle_model.includes(f.vehicle_model)) {
-      newErrors.vehicle_model = "Недопустимая модель";
+
+    if (!f.vehicle_model) {
+      newErrors.vehicle_model = "Укажите модель автомобиля";
+    } else if (!contract.vehicle_info[f.vehicle_brand]?.includes(f.vehicle_model)) {
+      newErrors.vehicle_model = "Недопустимая модель для марки";
     }
     if (!contract.vehicle_color.includes(f.vehicle_color)) {
       newErrors.vehicle_color = "Недопустимый цвет";
@@ -184,19 +190,25 @@ const AccidentForm: React.FC = () => {
         <Autocomplete
           id="vehicleBrand"
           label="Марка автомобиля"
-          options={contract.vehicle_brand}
+          options={availableBrands}
           value={currentForm.vehicle_brand}
-          onChange={(val) => updatePartialForm({ vehicle_brand: val })}
+          onChange={(val) =>
+            updatePartialForm({
+              vehicle_brand: val,
+              vehicle_model: ""
+            })
+          }
           error={errors.vehicle_brand}
         />
 
         <Autocomplete
           id="vehicleModel"
           label="Модель"
-          options={contract.vehicle_model}
+          options={availableModels}
           value={currentForm.vehicle_model}
           onChange={(val) => updatePartialForm({ vehicle_model: val })}
           error={errors.vehicle_model}
+          disabled={!currentForm.vehicle_brand}
         />
 
         <Dropdown

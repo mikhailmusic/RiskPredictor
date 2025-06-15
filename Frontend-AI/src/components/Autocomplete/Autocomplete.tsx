@@ -9,9 +9,10 @@ interface AutocompleteProps {
   onChange: (value: string) => void;
   error?: string;
   placeholder?: string;
+  disabled?: boolean;
 }
 
-const Autocomplete: React.FC<AutocompleteProps> = ({ id, label, options, value, onChange, error, placeholder }) => {
+const Autocomplete: React.FC<AutocompleteProps> = ({ id, label, options, value, onChange, error, placeholder, disabled = false }) => {
   const [inputValue, setInputValue] = useState(value);
   const [showOptions, setShowOptions] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
@@ -81,23 +82,25 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ id, label, options, value, 
         <input
           id={id}
           type="text"
-          className={`input-field ${error ? "input-error" : ""}`}
+          className={`input-field ${error ? "input-error" : ""} ${disabled ? "is-disabled" : ""}`}
           value={inputValue}
           placeholder={placeholder}
+          disabled={disabled}
           onChange={(e) => {
             setInputValue(e.target.value);
             setShowOptions(true);
             setActiveIndex(-1);
           }}
-          onFocus={() => setShowOptions(true)}
+          onFocus={() => !disabled && setShowOptions(true)}
           onBlur={() => {
             setShowOptions(false);
             setActiveIndex(-1);
+            onChange(inputValue); 
           }}
-          onKeyDown={handleKeyDown}
+          onKeyDown={(e) => !disabled && handleKeyDown(e)}
         />
 
-        {showOptions && filteredOptions.length > 0 && (
+        {!disabled && showOptions && filteredOptions.length > 0 && (
           <ul className="autocomplete-list custom-scroll">
             {filteredOptions.map((opt, index) => (
               <li

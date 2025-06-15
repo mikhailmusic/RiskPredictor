@@ -26,8 +26,7 @@ export type AllowedValuesContract = {
     min: number;
     max: number;
   };
-  vehicle_brand: string[];
-  vehicle_model: string[];
+  vehicle_info: Record<string, string[]>;
 };
 
 

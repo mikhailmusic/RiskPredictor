@@ -1,11 +1,6 @@
 from features import ALL_FEATURES
 
-
 def validate_input(data: dict, allowed: dict) -> tuple[bool, str]:
-    """
-    Возвращает (True, "") если всё в порядке, иначе (False, сообщение об ошибке).
-    """
-
     missing = [f for f in ALL_FEATURES if f not in data or data[f] is None]
     if missing:
         return False, f"Пропущены или пусты обязательные поля: {missing}"
@@ -27,12 +22,18 @@ def validate_input(data: dict, allowed: dict) -> tuple[bool, str]:
         return False, f"Недопустимое значение в 'road_conditions': {invalid_rc}"
 
     # Прочие категориальные поля
-    for field in [
-        "time_of_day", "driver_gender", "vehicle_color",
-        "vehicle_category_grouped", "day_of_week", "vehicle_brand", "vehicle_model"
-    ]:
+    for field in ["time_of_day", "driver_gender", "vehicle_color", "vehicle_category_grouped", "day_of_week"]:
         if data[field] not in allowed[field]:
             return False, f"Недопустимое значение в '{field}': {data[field]}"
+
+    # Связь: марка → модель
+    brand = data["vehicle_brand"]
+    model = data["vehicle_model"]
+
+    if brand not in allowed["vehicle_info"]:
+        return False, f"Недопустимая марка: {brand}"
+    if model not in allowed["vehicle_info"][brand]:
+        return False, f"Модель '{model}' не соответствует марке '{brand}'"
 
     # vehicle_year
     vy = data["vehicle_year"]
@@ -49,7 +50,7 @@ def validate_input(data: dict, allowed: dict) -> tuple[bool, str]:
     if not (allowed["driver_years_of_driving_experience"]["min"] <= exp <= allowed["driver_years_of_driving_experience"]["max"]):
         return False, f"driver_years_of_driving_experience {exp} вне допустимого диапазона"
 
-    # point_lat и point_long
+    # point.lat и point.long
     lat, lon = data["point.lat"], data["point.long"]
     if not (allowed["point_lat"]["min"] <= lat <= allowed["point_lat"]["max"]):
         return False, f"point.lat {lat} вне допустимого диапазона"
