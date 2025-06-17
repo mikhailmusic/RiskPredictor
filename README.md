@@ -40,3 +40,15 @@ npm run dev
 ```
 - Интерфейс доступен на: http://localhost:5173
 - Используются Яндекс.Карты для отображения точки на карте
+
+## Демонстрация 
+
+
+<img src="https://github.com/user-attachments/assets/c08132ac-5b7d-441a-a9df-8e659cac61b9" style="width: 750px;" />
+
+----------------------------------------------------------------
+
+<img src="https://github.com/user-attachments/assets/5c6a6ecc-c72c-45fb-ae24-7fd25490e13a" style="width: 750px;" />
+
+
+
