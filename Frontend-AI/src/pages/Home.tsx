@@ -95,12 +95,10 @@ const Main = () => {
     }
   }
 
-  const { currentPage, totalPages, paginatedData, handlePageChange } = usePagination<AccidentData>({
-    initialPage: 1,
-    pageSize: 10,
-    totalItems: history.length
+  const { currentPage, totalPages, paginatedData, handlePageChange } = usePagination({
+    data: history,
+    pageSize: 10
   });
-  const paginatedObjects = paginatedData(history);
 
   const columnMap: Record<string, ColumnConfig<AccidentData>> = {
     coordinates: {
@@ -175,12 +173,7 @@ const Main = () => {
             </Button>
           </div>
 
-          <DataTable
-            getRowKey={(item) => item.id}
-            onRowClick={(item) => loadFromHistory(item.id)}
-            data={paginatedObjects}
-            columns={columns}
-          />
+          <DataTable getRowKey={(item) => item.id} onRowClick={(item) => loadFromHistory(item.id)} data={paginatedData} columns={columns} />
 
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </section>
