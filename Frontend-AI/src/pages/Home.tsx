@@ -89,9 +89,7 @@ const Main = () => {
       const location = String(properties.get("description", {}));
       const route = String(properties.get("name", {}));
 
-      const foundAddress = { location, route };
-
-      return foundAddress;
+      return { location, route };
     }
   }
 
@@ -106,12 +104,20 @@ const Main = () => {
       render: (item) => (item.form.point_lat && item.form.point_long ? `${item.form.point_lat}, ${item.form.point_long}` : "-")
     },
     brand: {
-      header: "Марка автомобиля",
-      render: (item) => item.form.vehicle_brand || "-"
+      header: "Марка и модель автомобиля",
+      render: (item) => {
+        const brand = item.form.vehicle_brand;
+        const model = item.form.vehicle_model;
+        return brand && model ? `${brand} - ${model}` : "-";
+      }
     },
     model: {
-      header: "Модель",
-      render: (item) => item.form.vehicle_model || "-"
+      header: "Погода",
+      render: (item) => item.form.weather || "-"
+    },
+    road_conditions: {
+      header: "Состояние дороги",
+      render: (item) => item.form.road_conditions || "-"
     },
     day: {
       header: "День недели",
@@ -122,7 +128,9 @@ const Main = () => {
       render: (item) => item.form.time_of_day || "-"
     }
   };
-  const visibleColumns: string[] = isMobile ? ["coordinates", "brand", "model"] : ["coordinates", "brand", "model", "day", "time"];
+  const visibleColumns: string[] = isMobile
+    ? ["coordinates", "brand", "model"]
+    : ["coordinates", "brand", "model", "road_conditions", "day", "time"];
 
   const columns: ColumnConfig<AccidentData>[] = visibleColumns.map((key) => columnMap[key]);
 
